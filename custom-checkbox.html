@@ -1,0 +1,75 @@
+<input type="checkbox" class="custom-checkbox right-is-short" checked data-line-width="5" data-left-length="4" data-right-length="5">
+<style>
+html {
+  font-size: 400px;
+}
+/**
+ * デフォルトの外観をリセットし、背景色と枠を設定する
+ * font-sizeにHTML側の属性値を指定し、各寸法の基準値とする
+ */
+.custom-checkbox {
+  appearance: none;
+  background-color: white;
+  border: solid 0.1em gray;
+  border-radius: 0.1em;
+  box-sizing: border-box;
+  display: inline-block;
+  font-size: attr(data-line-width px, 1em);
+  height: 10em;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 10em;
+}
+/**
+ * チェック時は背景色を青色にする
+ */
+.custom-checkbox:checked {
+  background-color: dodgerblue;
+
+  --left-length: attr(data-left-length em, 3em);
+  --right-length: attr(data-right-length em, 5em);
+  --left-translate-x: calc(
+                        (var(--left-length) - 1em) / 2 * sin(45deg)
+                      );
+  --left-translate-y: 0;
+  --right-translate-x: calc(
+                         (var(--right-length) - 1em) / -2 * sin(45deg)
+                       );
+  --right-translate-y: calc(
+                         (var(--right-length) - var(--left-length)) / 2 * sin(45deg)
+                       );
+}
+/**
+ * 背景色やセンタリングなどの::beforeと::afterに共通する設定
+ */
+.custom-checkbox:checked::before,
+.custom-checkbox:checked::after {
+  background-color: white;
+  border-radius: 0.5em;
+  bottom: 0;
+  content: '';
+  display: inline-block;
+  height: 1em;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+/**
+ * チェックマークは3em:5em or 任意の比率で作成
+ */
+.custom-checkbox:checked::before {
+  transform: translateX(var(--right-translate-x))
+             translateY(var(--right-translate-y))
+             rotateZ(45deg);
+  width: calc(var(--left-length));
+}
+.custom-checkbox:checked::after {
+  transform: translateX(var(--left-translate-x))
+             translateY(var(--left-translate-y))
+             rotateZ(-45deg);
+  width: calc(var(--right-length));
+}
+</style>
